@@ -1,0 +1,59 @@
+
+{% extends 'app/admin_base.html' %}
+{% load static %}
+{% block content %}
+{%include 'app/admin_dashboard_cards.html'%}
+<br><br><br><br>
+<div class="container">
+  <div class="row">
+    <div class="panel panel-primary col-md-5" style="margin-left:2%;">
+      <div class="panel-heading" style="text-align:center;">
+        <h6 class="panel-title">Recent Doctors</h6>
+      </div>
+      <table class="table table-hover" id="dev-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Mobile</th>
+          </tr>
+        </thead>
+        {% for d in doctors %}
+        <tr>
+          <td> {{d.get_name}}</td>
+          <td>{{d.address}}</td>
+          <td>{{d.mobile_nos}}</td>
+           
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="panel panel-primary col-md-5" style="margin-left:5%;">
+      <div class="panel-heading" style="text-align:center;">
+        <h6 class="panel-title">Recent Patient</h6>
+      </div>
+      <table class="table table-hover" id="dev-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>Address</th>
+
+          </tr>
+        </thead>
+        {% for p in patients %}
+        <tr>
+          <td> {{p.get_name}}</td>
+          <td>{{p.mobile_no}}</td>
+          <td>{{p.email}}</td>
+          <td>{{p.address}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
