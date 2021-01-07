@@ -70,7 +70,7 @@ def afterlogin_view(request):
     if is_admin(request.user):
         return redirect('admin-dashboard')
     elif is_doctor(request.user):
-        accountapproval=models.Doctor.objects.all().filter(user_id=request.user.id,status=True)
+        accountapproval=models.Doctor.objects.all().filter(user_id=request.user.id)
         if accountapproval:
             return redirect('doctor-dashboard')
         else:
@@ -82,13 +82,13 @@ def afterlogin_view(request):
 def admin_dashboard_view(request):
     
     doctors=models.Doctor.objects.all().order_by('-id')
-    patients=models.Patient.objects.all().order_by('-id')
+    patients=models.Patient_details.objects.all().order_by('-id')
   
     doctorcount=models.Doctor.objects.all().count()
     pendingdoctorcount=models.Doctor.objects.all().count()
 
-    patientcount=models.Patient.objects.all().count()
-    pendingpatientcount=models.Patient.objects.all().count()
+    patientcount=models.Patient_details.objects.all().count()
+    pendingpatientcount=models.Patient_details.objects.all().count()
 
     mydict={
     'doctors':doctors,
@@ -189,7 +189,7 @@ def admin_patient_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_patient_view(request):
-    patients=models.Patient.objects.all()
+    patients=models.Patient_details.objects.all()
     return render(request,'app/admin_view_patient.html',{'patients':patients})
 
 
@@ -197,7 +197,7 @@ def admin_view_patient_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def delete_patient_from_hospital_view(request,pk):
-    patient=models.Patient.objects.get(id=pk)
+    patient=models.Patient_details.objects.get(id=pk)
     user=models.User.objects.get(id=patient.user_id)
     user.delete()
     patient.delete()
@@ -208,7 +208,7 @@ def delete_patient_from_hospital_view(request,pk):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def update_patient_view(request,pk):
-    patient=models.Patient.objects.get(id=pk)
+    patient=models.Patient_details.objects.get(id=pk)
     user=models.User.objects.get(id=patient.user_id)
     userForm=forms.PatientUserForm(instance=user)
     patientForm=forms.PatientForm(request.FILES,instance=patient)
@@ -260,12 +260,12 @@ def admin_add_patient_view(request):
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashboard_view(request):
-    patientcount=models.Patient.objects.all().filter(assignedDoctorId=request.user.id).count()
-    visits=models.Visits.objects.all().filter(doctorId=request.user.id).order_by('-id')
+    patientcount=models.Patient_details.objects.all().filter(assignedDoctorId=request.user.id).count()
+    visits=models.Visits_Details.objects.all().filter(doctorId=request.user.id).order_by('-id')
     patientid=[]
     for a in visits:
         patientid.append(a.patientId)
-    patients=models.Patient.objects.all().filter(status=True,user_id__in=patientid).order_by('-id')
+    patients=models.Patient_details.objects.all().filter(user_id__in=patientid).order_by('-id')
     visits=zip(visits,patients)
     mydict={
     'patientcount':patientcount,
@@ -287,6 +287,6 @@ def doctor_patient_view(request):
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_view_patient_view(request):
-    patients=models.Patient.objects.all().filter(status=True,assignedDoctorId=request.user.id)
+    patients=models.Patient_details.objects.all().filter(assignedDoctorId=request.user.id)
     doctor=models.Doctor.objects.get(user_id=request.user.id)
     return render(request,'app/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
