@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 class Doctor(models.Model):
     user = models.OneToOneField(User,null = True,on_delete=models.CASCADE)
-    address = models.CharField(max_length=40)
-    mobile_no = models.CharField(max_length=200,null=True)
+    name=models.CharField(max_length=200,null=True)
+    mobile_no= models.CharField(max_length=200,null=True)
 
     @property
     def get_name(self):
@@ -16,9 +16,9 @@ class Doctor(models.Model):
     def get_id(self):
         return self.user.id
     def __str__(self):
-        return "{} ({})".format(self.user.first_name)
+        return "({})".format(self.user.first_name)
 
-class Patient(models.Model):
+class Patient_details(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     name=models.CharField(max_length=200,null=True)
     mobile_no= models.CharField(max_length=200,null=True)
@@ -36,7 +36,7 @@ class Patient(models.Model):
         return self.user.first_name
 
 
-class Visits(models.Model):
+class Visits_Details(models.Model):
     patientId=models.PositiveIntegerField(null=True)
     doctorId=models.PositiveIntegerField(null=True)
     patientName=models.CharField(max_length=40,null=True)
@@ -48,6 +48,11 @@ class Visits(models.Model):
     temperature = models.IntegerField(null=True)
     bp = models.IntegerField(null=True)
     notes =  models.CharField(max_length=200,null=True)
+
+    
+
+    
+
 
     
 
