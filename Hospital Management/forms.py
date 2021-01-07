@@ -26,4 +26,4 @@ class DoctorUserForm(forms.ModelForm):
 class DoctorForm(forms.ModelForm):
     class Meta:
         model=models.Doctor
-        fields=['name','mobile_no']
+        fields="__all__"
